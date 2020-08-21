@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>Lightsail MySQL</title>
+</head>
+
+<body>
+    <header id="header">
+        <div id="content-header">
+            <div class="row">
+                Tutorial
+            </div>
+
+            <div class="row">
+                <h2>Criando uma máquina virtual com banco de dados MySQL no Aws Lightsail</h2>
+            </div>
+        </div>
+    </header>
+
+    <div class="sidenav">
+        <a href="#etapa-1">Etapa 1</a>
+        <a href="#etapa-2">Etapa 2</a>
+        <a href="#etapa-3">Etapa 3</a>
+        <a href="#etapa-4">Etapa 4</a>
+        <a href="#etapa-5">Etapa 5</a>
+        <a href="#etapa-6">Etapa 6</a>
+        <a href="#etapa-7">Etapa 7</a>
+        <a href="#conclusao">Conclusão</a>
+    </div>
+
+    <div class="container">
+        <div id="introduction">
+            <h3>Introdução</h3>
+            <br>
+
+            <p>Olá pessoal! Tudo bem com vocês?</p>
+
+            <p> Hoje ensinarei a vocês a como criar uma máquina virtual no Amazon Lightsail para hospedar
+                um banco de dados mysql e acessá-lo remotamente.</p>
+        </div>
+
+        <br>
+
+        <div id="lightsail">
+            <h3>O que é o Aws Lightsail</h3>
+            <br>
+            <p>O <b>Lightsail</b> é uma plataforma de nuvem fácil de usar que oferece tudo o que você precisa para criar
+                um
+                aplicativo ou site, além de um plano mensal de baixo custo.
+            </p>
+
+            <p>Você pode acessar o site pelo link: <a href="https://aws.amazon.com/pt/lightsail/"
+                    target="_blank">https://aws.amazon.com/pt/lightsail/</a></p>
+        </div>
+        <br>
+        <div id="create-account">
+            <h3>Criando uma conta</h3>
+            <br>
+
+            <p>Após acessar o link acima clique no botão 'Comece a usar gratuitamente, como mostrado na imagem a
+                seguir."</p>
+            <br>
+
+            <img src="./images/aws-create-account.png" alt="Response image" class="img-thumbnail">
+            <br><br>
+
+            <p>Agora basta criar uma conta e colocar os dados de cobrança, além do Lightsail você tem acesso
+                a varios outros recursos gratuitamente na aws.
+                Após criar a conta e realizar o login você pode acessar o Lightsail por este link
+                <a href="https://lightsail.aws.amazon.com/" target="_blank">https://lightsail.aws.amazon.com/</a></p>
+        </div>
+        <br>
+        <div id="etapa-1">
+            <h3>Etapa 1 - Criando uma instância</h3>
+            <br>
+
+            <img src="./images/create-instance.png" alt="Response image" class="img-thumbnail">
+            <br><br>
+
+            <p>Esta é a página de criação de instância, você pode escolher vários locais e imagens para sua instância.
+                A que escolheremos hoje será a plataforma Linux/Unix, e usaremos apenas o OS e o Debian 9.5, como
+                mostrado na imagem abaixo:
+            </p>
+            <br>
+
+            <img src="./images/create-debian-instance.png" alt="Response image" class="img-thumbnail">
+            <br><br>
+
+            <p>Vamos escolher o plano de $3,50 que é grátis no primeiro mês.</p>
+            <br>
+
+            <img src="./images/create-instance-price.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Coloque um nome para sua instância e clique no botão “Create instance”</p>
+            <br>
+
+            <img src="./images/create-instance-save.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Após criado você terá sua máquina funcionando:</p>
+            <br>
+
+            <img src="./images/machine.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Clique no botão lateral da div da máquina e esolha a opção “Manage”, você terá uma página parecida com
+                essa:</p>
+            <br>
+
+            <img src="./images/machine-manage.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Vá em “Networking” e na div de IP addresses clique no botão create static IP</p>
+            <br>
+
+            <img src="./images/machine-ip.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>E crie um IP estático.</p>
+            <p>Vá em “Networking” novamente e na parte de “Firewall” clique em Add rule.</p>
+            <p>Em Application selecione Mysql/Aurora e clique em create.</p>
+            <br>
+
+            <img src="./images/firewall.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Agora vamos acessar nossa máquina via ssh para instalarmos o banco de dados.</p>
+            <br>
+
+            <img src="./images/connect.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Após se conectar ao terminal da máquina digite os comandos a seguir:</p>
+
+            <div class="command">
+                <pre>$ sudo apt update</pre>
+                <pre>$ sudo apt upgrade</pre>
+            </div>
+            <br><br>
+        </div>
+
+        <div id="etapa-2">
+            <h3>Etapa 2 - Adicionando o repositório de software MySQL</h3>
+            <br>
+
+            <p>O MySQL fornece um .deb pacote que se trata da configuração e instalação oficial do MySQL, você pode ver
+                a última versão no site: </p>
+
+            <p><a href="https://dev.mysql.com/downloads/repo/apt/"
+                    target="_blank">https://dev.mysql.com/downloads/repo/apt/</a></p>
+
+            <p><b>Importante</b>, é aconselhável você sempre utilizar a versão mais recente para isso basta você
+                copiar o nome
+                no pacote sem os parenteses:</p>
+            <br>
+
+            <img src="./images/mysql-deb-download.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>E substituir no comando o abaixo a partir do get/, caso seja uma versão diferente da que estamos usando
+                aqui.</p>
+
+            <div class="command">
+                <pre>$ cd /tmp</pre>
+                <pre>$ wget https://dev.mysql.com/get/mysql-apt-config_0.8.15-1_all.deb</pre>
+            </div>
+            <br>
+
+            <p>Verifique se o arquivo foi baixado corretamente usando o comando ls
+                Você terá uma saída como parecida com essa:
+            </p>
+
+            <div class="command">
+                <code>mysql-apt-config_0.8.15-1_all.deb</code>
+            </div>
+            <br>
+
+            <p>Agora vamos instalar, use o comando:</p>
+
+            <div class="command">
+                <pre>$ sudo dpkg -i mysql-apt-config*</pre>
+            </div>
+            <br>
+
+            <p>O commando deverá resultar em uma tela como essa:</p>
+
+            <img src="./images/mysql-install-start.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Dpkg é usado para instalar, remover e inspecionar .debpacotes de software. O -i sinalizador indica que
+                gostaríamos de instalar a partir do arquivo especificado.</p>
+
+            <p>Nesta parte você poderá escolher qual versão do mysql e outras configurações você deseja, após
+                selecionados basta selecionar o Ok:</p>
+
+            <p>O pacote agora terminará de adicionar o repositório. Atualize o aptcache do seu pacote para
+                disponibilizar os novos pacotes de software:</p>
+
+            <div class="command">
+                <pre>$ sudo apt update</pre>
+            </div>
+            <br><br>
+        </div>
+
+        <div id="etapa-3">
+            <h3>Etapa 3 - Instalação do MySQL</h3>
+            <br>
+
+            <p>Após adicionarmos o repositório e nosso cache de pacotes atualizado, podemos instalar o pacote do
+                servidor MySQL:</p>
+
+            <div class="command">
+                <pre>$ apt install mysql-server</pre>
+            </div>
+            <br>
+
+            <img src="./images/mysql-install-rootpass.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Coloque uma senha simples, logo adiante atualizaremos o formato de senha.</p>
+            <br>
+
+            <img src="./images/mysql-install-passoption.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Selecione a primeira opção.</p>
+            <p>Após a instalação você pode verificar o status do serviço MySQL usando o comando:</p>
+
+            <div class="command">
+                <pre>$ sudo systemctl status mysql</pre>
+            </div>
+            <br>
+
+            <p>Você terá uma saída como essa:</p>
+
+            <div class="command">
+                <code>admin@ip-172-26-11-229:/tmp$ sudo systemctl status mysql <br>● mysql.service - MySQL Community Server <br>Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled) <br>   Active: active (running) since Wed 2020-08-19 22:39:47 UTC; 48s ago <br>Docs: man:mysqld(8) <br>                            http://dev.mysql.com/doc/refman/en/using-systemd.html <br>                    Process: 23489 ExecStartPre=/usr/share/mysql-8.0/mysql-systemd-start pre (code=exited, s <br>                    Main PID: 23524 (mysqld) <br>                    Status: "Server is operational" <br>                        Tasks: 39 (limit: 4915) <br>                    CGroup: /system.slice/mysql.service <br>                            └─23524 /usr/sbin/mysqld <br>                    Aug 19 22:39:46 ip-172-26-11-229 systemd[1]: Starting MySQL Community Server... <br>                    Aug 19 22:39:47 ip-172-26-11-229 systemd[1]: Started MySQL Community Server. <br></code>
+            </div>
+            <br><br>
+        </div>
+
+        <div id="etapa-4">
+            <h3>Etapa 4 - Protegendo o MySQL</h3>
+            <br>
+
+            <p>O MySQL vem com um comando que podemos usar para realizar algumas atualizações relacionadas à segurança
+                em nossa nova instalação. Vamos executá-lo agora:</p>
+
+            <div class="command">
+                <pre>$ mysql_secure_installation</pre>
+            </div>
+            <br>
+
+            <p>Será solicitado sua senha raiz, digite-a e pressione enter.</p>
+
+            <p>Algumas perguntas serão feitas, para você selecionar o uso do plugin de validação de senha do mysql,
+                digite Y.</p>
+
+            <p>Selecione o tipo de senha que você deseja usar, neste caso usaremos o tipo 2, então digite 2.</p>
+
+            <p>Digite Y para mudar sua senha de root padrão.</p>
+
+            <p>Digite sua nova senha, aconselho a usar o site <a href="https://passwordsgenerator.net/"
+                    target="_blank">https://passwordsgenerator.net/</a> e selecionar o tipo
+                <b>STRONG</b>.</p>
+
+            <p>
+                <b>IMPORTANTE</b> NÃO UTILIZE SENHAS QUE POSSUAM OS CARACTERES <code>‘</code> ou <code>"</code>, POIS
+                PODEM LHE CAUSAR PROBLEMAS
+                NO
+                MOMENTO DE CRIAR USUÁRIOS PARA O BANCO.
+            </p>
+
+            <p>Gere uma senha, cole no prompt do s.o e salve-a em um local seguro.</p>
+
+            <p>Após trocar a senha digite Y para confirmar.</p>
+
+            <p>Digite Y para remover usuarios anonimos na proxima pergunta.</p>
+
+            <p> Digite Y para remover acesso remoto do root.</p>
+
+            <p> Digite Y se você quiser remover as tabelas de testes.</p>
+
+            <p>Digite Y para atualizar os privilegios.</p>
+
+            <br><br>
+        </div>
+
+        <div id="etapa-5">
+            <h3>Etapa 5 - Testando o MySQL</h3>
+            <br>
+
+            <p>Use o comando abaixo:</p>
+
+            <div class="command">
+                <pre>$ sudo mysqladmin -u root -p version</pre>
+            </div>
+            <br>
+
+            <p>Use a senha criada anteriormente.</p>
+
+            <p>Se você obteve uma saída parecida com essa Parabéns seu MySQL foi instalado com sucesso:</p>
+
+            <div class="command">
+                <code>mysqladmin  Ver 8.0.21 for Linux on x86_64 (MySQL Community Server - GPL)<br>Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.<br><br>Oracle is a registered trademark of Oracle Corporation and/or its<br>affiliates. Other names may be trademarks of their respective<br>owners.<br><br>Server version8.0.21<br>Protocol version10<br>ConnectionLocalhost via UNIX socket<br>UNIX socket/var/run/mysqld/mysqld.sock<br>Uptime:16 min 50 sec<br><br>Threads: 2  Questions: 14  Slow queries: 0  Opens: 128  Flush tables: 3  Open tables: 49  <br>Queries per second avg: 0.013<br></code>
+            </div>
+
+            <br><br>
+        </div>
+
+        <div id="etapa-6">
+            <h3>Etapa 6 - Configurando o acesso remoto e usuários</h3>
+            <br>
+
+            <p>Vamos precisar agora configurar o arquivo my.cnf para permitir o acesso remoto.</p>
+
+            <p>Para editar o arquivo execute o comando no diretório raiz:</p>
+
+            <div class="command">
+                <pre>$ sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf</pre>
+            </div>
+            <br>
+
+            <p>Você terá uma saída parecida com essa:</p>
+
+            <img src="./images/mycnf.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Se o seu arquivo não possuir a linha <code>bind-address</code>, adicione ela após as configurações do
+                <code>[mysqld]</code> usando
+                o ip <code>0.0.0.0</code>, como mostrado na imagem abaixo:</p>
+
+            <img src="./images/mycnfOk.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Salve o arquivo pressionando ctrl + x, depois y, depois ENTER.</p>
+
+            <p>Esta configuração irá servir para que você possa acessar o banco usando um IP dinâmico.</p>
+
+            <p>Caso o arquivo não existir, provavelmente deve estar em outro diretório da máquina, será necessário
+                localizá-lo para realizar as modificações.</p>
+
+            <p><b>Agora vamos criar os Usuários!</b></p>
+
+            <p>Use o comando a seguir para acessar o terminal do mysql na máquina.</p>
+
+            <div class="command">
+                <pre>$ sudo mysql -u root -p</pre>
+            </div>
+            <br>
+
+            <img src="./images/mysql-logado.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Vamos criar primeiro o usuário local, digite o SQL a seguir colocando o nome de usuário desejado:</p>
+
+            <div class="command">
+                <pre>CREATE USER 'SEU_USUARIO'@'localhost' IDENTIFIED BY 'SUA_SENHA'</pre>
+            </div>
+            <br>
+
+            <p>Lembre-se de criar uma senha do tipo <b>STRONG</b> para ele e se atentando para que não contenha os
+                caractres <code>'</code> ou <code>"</code> na senha.</p>
+
+            <p>Agora vamos criar um usuário para um IP qualquer:</p>
+
+            <div class="command">
+                <pre>CREATE USER 'SEU_USUARIO'@'%.%.%.%' IDENTIFIED BY 'SUA_SENHA'</pre>
+            </div>
+            <br>
+
+            <p>Vamos criar um usuário para o IP 0.0.0.0 e um com o % apenas, caso ele venha de um DNS:</p>
+
+            <div class="command">
+                <pre>CREATE USER 'SEU_USUARIO'@'0.0.0.0' IDENTIFIED BY 'SUA_SENHA'</pre>
+            </div>
+            <br>
+
+            <div class="command">
+                <pre>CREATE USER 'SEU_USUARIO'@'%' IDENTIFIED BY 'SUA_SENHA'</pre>
+            </div>
+            <br>
+
+            <div class="command">
+                <pre>CREATE USER 'SEU_USUARIO'@'0' IDENTIFIED BY 'SUA_SENHA'</pre>
+            </div>
+            <br>
+
+            <p>Agora precisamos definir privilégios para os usuários.</p>
+
+            <p>
+                <b>IMPORTANTE</b> Nenhum usuário pode ser criado usando o comando WITH GRANT OPTION, para que esses
+                usuários
+                não possam criar outros usuários com os mesmos privilégios que ele possuí.
+                Você pode estudar mais a fundo sobre permissões para que sua instância fique segura.
+            </p>
+
+            <p>Vamos utilizar os comandos:</p>
+
+            <div class="command">
+                <pre>GRANT ALL PRIVILEGES ON *.* TO 'SEU_USUARIO'@'localhost'; <br>GRANT ALL PRIVILEGES ON *.* TO 'SEU_USUARIO'@'0.0.0.0';<br>GRANT ALL PRIVILEGES ON *.* TO 'SEU_USUARIO'@'%.%.%.%';<br>GRANT ALL PRIVILEGES ON *.* TO 'SEU_USUARIO'@'%';<br>GRANT ALL PRIVILEGES ON *.* TO 'SEU_USUARIO'@'0';</pre>
+            </div>
+            <br>
+
+            <p>Agora precisamos atualizar a tabela de privilégios:</p>
+
+            <div class="command">
+                <pre>FLUSH PRIVILEGES;</pre>
+            </div>
+            <br>
+
+            <p>Use o comando exit</p>
+            <p>E reinicie o mysql:</p>
+            <div class="command">
+                <pre>$ sudo service mysqld restart</pre>
+            </div>
+            <br><br>
+        </div>
+
+        <div id="etapa-7">
+            <h3>Etapa 7 - Acessando o MySQL</h3>
+            <br>
+
+            <p>Vamos agora configurar uma conexão e testar nossa conectividade, vamos utilizar o MySQL
+                Workbench, você pode usar qualquer outro desde que tenha compatibilidade com a versão do mysql que você
+                instalou.</p>
+
+            <p>Vamos utilizar aqui como HOST o IP estático que criamos na máquina virtual no Lightsail.
+                Username será o usuário que criamos no MySQL e a senha será a senha deste usuário.
+            </p>
+
+            <p>Clique em Test Conection.</p>
+
+            <img src="./images/workbench-connection.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+
+            <p>Caso nenhum erro aconteça, Parabéns agora você possuí um banco de dados remoto para usar em suas
+                aplicações!</p>
+
+            <p>Você pode acessar a instância e criar bancos de testes e realizar queries.</p>
+
+            <img src="./images/workbench-success.png" alt="Response image" class="img-thumbnail mx-auto d-block">
+            <br><br>
+        </div>
+
+        <div id="conclusao">
+            <h3>Conclusão</h3>
+            <br>
+
+            <p>Espero que este tutorial tenha ajudado você e que seja de grande proveito, estude bastante isso é sempre
+                importante.</p>
+
+            <p>Um grande abraço!</p>
+
+            <br><br>
+        </div>
+    </div>
+
+    <footer class="page-footer font-small blue">
+        <div class="footer-copyright text-center py-3">2020 - Jean Fernandes
+            <a href="https://github.com/jeanfernandesComp1997" target="_blank"> GitHub</a>
+        </div>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
