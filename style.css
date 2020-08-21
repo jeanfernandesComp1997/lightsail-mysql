@@ -13,7 +13,7 @@
 }
 
 .sidenav {
-    width: 130px;
+    width: 300px;
     position: fixed;
     z-index: 1;
     top: 170px;
@@ -40,7 +40,7 @@
     .sidenav a {font-size: 18px;}
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1800px) {
     .sidenav{display: none;}
     .btn-toggle{display: block;}
 }
